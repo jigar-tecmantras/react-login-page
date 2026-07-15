@@ -57,7 +57,8 @@ label {
 }
 
 input[type='email'],
-input[type='password'] {
+input[type='password'],
+input[type='text'] {
   margin-top: 0.35rem;
   padding: 0.95rem 1rem;
   border-radius: 0.85rem;
@@ -175,6 +176,38 @@ input:focus {
   color: #8ea0c1;
   text-align: center;
   line-height: 1.4;
+}
+
+.auth-switch {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+  color: #c5c9e1;
+}
+
+.auth-switch a {
+  color: #7dd3fc;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+.terms {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #c5c9e1;
+}
+
+.terms a {
+  color: #7dd3fc;
+  font-weight: 600;
+}
+
+.terms a:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 480px) {
