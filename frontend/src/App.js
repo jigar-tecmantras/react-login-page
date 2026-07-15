@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const phoneRegex = /^\+?[0-9][0-9\s-]{6,19}$/;
 
 const mockAuthenticate = (email, password) =>
   new Promise((resolve, reject) => {
@@ -15,7 +17,7 @@ const mockAuthenticate = (email, password) =>
     }, 1200);
   });
 
-const mockRegister = ({ email, name }) =>
+const mockRegister = ({ email, name, phone }) =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
       const blocked = ['already@taken.com', 'existing@example.com'];
@@ -24,7 +26,8 @@ const mockRegister = ({ email, name }) =>
         return;
       }
 
-      resolve(`Account created for ${name.trim() || 'you'}! Check your inbox for the welcome packet.`);
+      const phoneHint = phone?.trim() ? ` We'll text a confirmation to ${phone.trim()}.` : '';
+      resolve(`Account created for ${name.trim() || 'you'}! Check your inbox for the welcome packet.${phoneHint}`);
     }, 1400);
   });
 
@@ -216,6 +219,7 @@ function RegisterForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
     terms: false,
@@ -249,6 +253,12 @@ function RegisterForm() {
       newErrors.password = 'Use at least 6 characters for your password.';
     }
 
+    if (formData.phone.trim()) {
+      if (!phoneRegex.test(formData.phone.trim())) {
+        newErrors.phone = 'Use digits, spaces, or dashes (minimum 7 digits).';
+      }
+    }
+
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password.';
     } else if (formData.confirmPassword !== formData.password) {
@@ -277,7 +287,7 @@ function RegisterForm() {
     try {
       const successMessage = await mockRegister(formData);
       setStatus({ loading: false, message: successMessage, variant: 'success' });
-      setFormData({ name: '', email: '', password: '', confirmPassword: '', terms: false });
+      setFormData({ name: '', email: '', phone: '', password: '', confirmPassword: '', terms: false });
     } catch (error) {
       setStatus({ loading: false, message: error.message, variant: 'error' });
     }
@@ -317,6 +327,23 @@ function RegisterForm() {
         {errors.email && (
           <p className="field-error" id="register-email-error">
             {errors.email}
+          </p>
+        )}
+
+        <label htmlFor="phone">Phone number</label>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          placeholder="+1 555 012 3456"
+          value={formData.phone}
+          onChange={handleChange}
+          aria-invalid={errors.phone ? 'true' : 'false'}
+          aria-describedby={errors.phone ? 'phone-error' : undefined}
+        />
+        {errors.phone && (
+          <p className="field-error" id="phone-error">
+            {errors.phone}
           </p>
         )}
 
