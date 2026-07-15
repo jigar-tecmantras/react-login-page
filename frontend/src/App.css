@@ -42,6 +42,38 @@
   font-size: 2rem;
 }
 
+.auth-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 0.55rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.08);
+  color: #d0d4ec;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.auth-tab.active {
+  border-color: transparent;
+  background: linear-gradient(120deg, #7c3aed, #6366f1);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.35);
+}
+
+.auth-tab:focus-visible {
+  outline: 2px solid #7dd3fc;
+  outline-offset: 2px;
+}
+
 form {
   margin-top: 0.5rem;
   display: flex;
@@ -176,23 +208,6 @@ input:focus {
   color: #8ea0c1;
   text-align: center;
   line-height: 1.4;
-}
-
-.auth-switch {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  text-align: center;
-  color: #c5c9e1;
-}
-
-.auth-switch a {
-  color: #7dd3fc;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.auth-switch a:hover {
-  text-decoration: underline;
 }
 
 .terms {
