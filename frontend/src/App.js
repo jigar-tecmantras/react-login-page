@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,9 +30,8 @@ const mockRegister = ({ email, name }) =>
 
 function StatusBanner({ status }) {
   if (!status?.message) return null;
-  const variant = status.variant || 'neutral';
   return (
-    <div className={`status-message ${variant}`} role="status" aria-live="polite">
+    <div className={`status-message ${status.variant || 'neutral'}`} role="status" aria-live="polite">
       {status.message}
     </div>
   );
@@ -52,10 +51,42 @@ function Brand() {
   );
 }
 
+function AuthTabs({ current, navigate }) {
+  const tabs = [
+    { label: 'Sign in', path: '/login' },
+    { label: 'Create account', path: '/register' },
+  ];
+
+  return (
+    <div className="auth-tabs" role="tablist" aria-label="Authentication toggle">
+      {tabs.map((tab) => {
+        const isActive = current === tab.path.replace('/', '') || (tab.path === '/login' && current === 'login');
+        return (
+          <button
+            key={tab.path}
+            type="button"
+            role="tab"
+            aria-selected={isActive}
+            className={`auth-tab ${isActive ? 'active' : ''}`}
+            onClick={() => navigate(tab.path)}
+          >
+            {tab.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function AuthCard({ status, tip, children }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const currentPath = location.pathname === '/register' ? 'register' : 'login';
+
   return (
     <div className="login-card">
       <Brand />
+      <AuthTabs current={currentPath} navigate={navigate} />
       <StatusBanner status={status} />
       {children}
       {tip && <p className="hint-line">{tip}</p>}
@@ -177,10 +208,6 @@ function LoginForm() {
           {status.loading ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
-
-      <p className="auth-switch">
-        New to Atlas? <Link to="/register">Create an account</Link>
-      </p>
     </AuthCard>
   );
 }
@@ -343,10 +370,6 @@ function RegisterForm() {
           {status.loading ? 'Creating account…' : 'Create account'}
         </button>
       </form>
-
-      <p className="auth-switch">
-        Already have an account? <Link to="/login">Sign in</Link>
-      </p>
     </AuthCard>
   );
 }
