@@ -1,11 +1,15 @@
 # React Login Page
 
-A standalone React login page with real-time validation, friendly messaging, and responsive styling.
+A simple, responsive login page built with React and Create React App.
 
-## Getting started
+## Run locally
 
-1. `cd frontend`
-2. `npm install`
-3. `npm start`
+```bash
+cd frontend
+npm install
+npm start
+```
 
-The interface highlights empty fields, validates the email pattern, and simulates authentication with loading, success, and failure states.
+The app opens at http://localhost:3000.
+
+This demo performs client-side validation only and does not send credentials to a backend.
